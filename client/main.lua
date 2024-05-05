@@ -517,7 +517,7 @@ RegisterNetEvent("kp-Rental:client:payRent", function(paymentType, vehicle, avai
     TriggerServerEvent("kp-Rental:server:payRent", paymentType, vehicle, availablePark)
 end)
 
-RegisterNetEvent("kp-Rental:client:vehicleSpawn", function(vehicleModel, vehiclePrice, availablePark, cb)
+RegisterNetEvent("kp-Rental:client:vehicleSpawn", function(vehicleModel, vehiclePrice, availablePark, numplate, cb)
     local model = vehicleModel
 
     RequestModel(model)
@@ -525,11 +525,17 @@ RegisterNetEvent("kp-Rental:client:vehicleSpawn", function(vehicleModel, vehicle
         Citizen.Wait(0)
     end
     SetModelAsNoLongerNeeded(model)
-
     QBCore.Functions.SpawnVehicle(model, function(veh)
         SetEntityHeading(veh, availablePark.heading)
-        exports[Config.FuelExport]:SetFuel(veh, 100.0)
+        exports[Config.FuelExport]:SetFuel(veh, 30.0)
         SetEntityAsMissionEntity(veh, true, true)
+        SetVehicleNeedsToBeHotwired(veh, false)
+        SetVehicleHasBeenOwnedByPlayer(veh, true)
+        SetEntityAsMissionEntity(veh, true, true)
+        SetVehicleNumberPlateText(veh, tostring(numplate))
+        SetVehicleIsStolen(veh, false)
+        SetVehicleIsWanted(veh, false)
+        SetVehRadioStation(veh, 'OFF')
         TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
         local currentPlate = QBCore.Functions.GetPlate(veh)
 

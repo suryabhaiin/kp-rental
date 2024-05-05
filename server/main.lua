@@ -64,14 +64,14 @@ RegisterServerEvent('kp-Rental:server:attemptPayRent', function(paymentType, veh
         end
     end
 end)
-
+local numplate = math.random(11111111, 55555555)
 RegisterServerEvent('kp-Rental:server:payRent', function(paymentType, vehicle, availablePark)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-
+    numplate = numplate + 1
     Player.Functions.RemoveMoney(paymentType, vehicle.price, "rentals")
     TriggerClientEvent('QBCore:Notify', src, Lang:t("success.rented_vehicle") .. vehicle.price, "success")
-    TriggerClientEvent('kp-Rental:client:vehicleSpawn', src, vehicle.model, vehicle.price, availablePark)
+    TriggerClientEvent('kp-Rental:client:vehicleSpawn', src, vehicle.model, vehicle.price, availablePark, numplate)
     payreturn[vehicle.model] = vehicle.price
 end)
 
